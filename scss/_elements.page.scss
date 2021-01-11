@@ -1,0 +1,73 @@
+html {
+    height: 100%;
+    box-sizing: border-box;
+    font-size: 100%;
+}
+
+*, *:before, *:after {
+    box-sizing: inherit;
+    outline-color: $blue;
+}
+
+::selection {
+    color: $black;
+    background: $yellow;
+}
+
+::-webkit-scrollbar {
+    width: .5em;
+    height: .5em;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: .5em;
+    background: rgba($black, .5);
+}
+
+.visually-hidden {
+    width: 1px;
+    height: 1px;
+    position: absolute !important;
+    clip: rect(1px,1px,1px,1px);
+    word-wrap: normal;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+body {
+    font-family: $sans;
+    font-size: normal;
+    font-weight: 400;
+    line-height: 1.5;
+    color: $black;
+}
+
+h1 {
+    @include aa;
+    -webkit-background-clip: text;
+    margin: 1em 0;
+    font-family: $montserrat;
+    font-size: 3em;
+    line-height: 1.25;
+    text-transform: capitalize;
+    color: transparent;
+    background-clip: text;
+    background-image: radial-gradient(circle at 25% -10%
+                                     , $g6 0%
+                                     , $g5 7%
+                                     , $g4 15%
+                                     , $g3 30%
+                                     , $g2 50%
+                                     , $g1 70%
+                                     );
+}
+
+ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}

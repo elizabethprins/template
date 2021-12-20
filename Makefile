@@ -14,9 +14,6 @@ export PATH := $(NPM_PATH):$(PATH)
 
 all: elm styles assets
 
-analyse:
-	@elm-analyse --elm-format-path=./node_modules/elm-format/bin/elm-format src
-
 assets:
 	@mkdir -p ${DIST_DIR}/assets/ && cp -R ./assets ${DIST_DIR}
 	@cp index.html ${DIST_DIR}
@@ -40,6 +37,9 @@ elm:
 elmoptimized:
 	@elm make --optimize src/Main.elm --output dist/main.js
 
+elmreview:
+	@npx elm-review
+
 format:
 	@elm-format --yes src
 
@@ -56,6 +56,7 @@ help:
 	@echo "  distclean              Remove build dependencies"
 	@echo "  elm                    Compile Elm files"
 	@echo "  elmoptimized           Compile and optimize Elm files"
+	@echo "  elmreview              Review Elm files"
 	@echo "  format                 Run Elm format"
 	@echo "  format-validate        Check if Elm files are formatted"
 	@echo "  help                   Magic"

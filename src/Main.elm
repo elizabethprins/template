@@ -1,4 +1,4 @@
-module Main exposing (Model, Msg(..), init, main, update, view)
+module Main exposing (..)
 
 import Browser
 import Html exposing (..)
@@ -24,7 +24,7 @@ main =
 
 
 subscriptions : Model -> Sub Msg
-subscriptions model =
+subscriptions _ =
     Sub.none
 
 
@@ -33,12 +33,16 @@ subscriptions model =
 
 
 type alias Model =
-    {}
+    { title : String
+    , description : String
+    }
 
 
 init : () -> ( Model, Cmd Msg )
 init _ =
-    ( {}
+    ( { title = "Hello, world"
+      , description = "Start your Elm project with this template!"
+      }
     , Cmd.none
     )
 
@@ -48,13 +52,13 @@ init _ =
 
 
 type Msg
-    = NoOp
+    = NoOp Never
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        NoOp ->
+        NoOp _ ->
             ( model, Cmd.none )
 
 
@@ -67,10 +71,8 @@ view model =
     { title = "Project template"
     , body =
         [ main_ [ class "main" ]
-            [ header []
-                [ h1 [] [ text "Project template" ]
-                , p [] [ text "Nothing here yet!" ]
-                ]
+            [ h1 [] [ text model.title ]
+            , p [] [ text model.description ]
             ]
         ]
     }

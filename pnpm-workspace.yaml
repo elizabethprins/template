@@ -1,0 +1,10 @@
+# Dependency install scripts are blocked by default (supply-chain protection).
+# Only the packages listed here may run them; `false` = silence the prompt, never build.
+# Cooldown and trust policy come from the global ~/.config/pnpm/config.yaml.
+allowBuilds:
+  elm: true               # postinstall downloads the elm binary used by the Makefile
+  elm-format: true        # same
+
+# Optional native deps we never use: sass's --watch helper (the Makefile watches with entr instead).
+ignoredOptionalDependencies:
+  - '@parcel/watcher'

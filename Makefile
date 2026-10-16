@@ -5,12 +5,12 @@ default: all
 ELM_FILES = $(shell find src -name '*.elm')
 
 SHELL := /bin/bash
-NPM_PATH := ./node_modules/.bin
+# Project-local binaries (pinned in package.json / pnpm-lock.yaml). Called explicitly rather than
+# via PATH: Apple's GNU Make 3.81 ignores `export PATH` for direct command lookup.
+BIN := ./node_modules/.bin
 ROOT_DIR:=$(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 DIST_DIR := ./dist
 SCSS_FILES = $(shell find scss -name '*.scss')
-
-export PATH := $(NPM_PATH):$(PATH)
 
 all: elm styles assets
 
@@ -24,7 +24,7 @@ clean:
 	@rm -Rf dist/*
 
 deps:
-	@npm install
+	@pnpm install --frozen-lockfile
 
 distclean: clean
 	@rm -Rf elm-stuff
@@ -32,22 +32,22 @@ distclean: clean
 	@rm -Rf node_modules
 
 elm:
-	@elm make --debug src/Main.elm --output dist/main.js
+	@$(BIN)/elm make --debug src/Main.elm --output dist/main.js
 
 elmoptimized:
-	@elm make --optimize src/Main.elm --output dist/main.js
+	@$(BIN)/elm make --optimize src/Main.elm --output dist/main.js
 
 elmreview:
-	@npx elm-review
+	@$(BIN)/elm-review
 
 elmreview-fix:
-	@npx elm-review --fix
+	@$(BIN)/elm-review --fix
 
 format:
-	@elm-format --yes src
+	@$(BIN)/elm-format --yes src
 
 format-validate:
-	@elm-format --validate src
+	@$(BIN)/elm-format --validate src
 
 help:
 	@echo "Run: make <target> where <target> is one of the following:"
@@ -69,12 +69,12 @@ help:
 	@echo "  watch                  Run 'make all' on Elm file change"
 
 minify:
-	@npx uglify-js ${DIST_DIR}/main.js --compress 'pure_funcs="F2,F3,F4,F5,F6,F7,F8,F9,A2,A3,A4,A5,A6,A7,A8,A9",pure_getters,keep_fargs=false,unsafe_comps,unsafe' | npx uglify-js --mangle --output ${DIST_DIR}/main.js\
+	@$(BIN)/uglifyjs ${DIST_DIR}/main.js --compress 'pure_funcs="F2,F3,F4,F5,F6,F7,F8,F9,A2,A3,A4,A5,A6,A7,A8,A9",pure_getters,keep_fargs=false,unsafe_comps,unsafe' | $(BIN)/uglifyjs --mangle --output ${DIST_DIR}/main.js\
 
 styles: $(SCSS_FILES)
-	@sass scss/style.scss dist/style.css
+	@$(BIN)/sass scss/style.scss dist/style.css
 
 watch:
-	browser-sync start --server ${DIST_DIR} --files ["${DIST_DIR}/*.css", "${DIST_DIR}/*.js"] & \
+	$(BIN)/browser-sync start --server ${DIST_DIR} --files ["${DIST_DIR}/*.css", "${DIST_DIR}/*.js"] & \
 	find scss -name '*.scss' | entr make styles & \
 	find src -name '*.elm' | entr make all
